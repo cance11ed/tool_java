@@ -1,3 +1,5 @@
+package ml.weiheng.tool;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -11,15 +13,18 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BilibiliClientDownsLocat {
-  String downloadPath = "/home/h/file/mv/download";
-  String outPath = "/home/h/file/mv/tmp";
-  JSONArray changes = new JSONArray();
 
-  String bakPath = outPath + File.separator + "bak.json";
+  static String downloadPath = "/home/h/file/mv/download";
+  static String outPath = "/home/h/file/mv/tmp";
+  static String bakPath = outPath + File.separator + "bak.json";
+  static JSONArray changes = new JSONArray();
+
+  public static void main(String[] args) {
+    doMv();
+  }
 
   /** 移动文件 */
-  @Test
-  public void test() {
+  public static void doMv() {
 
     File downloadDirFile = new File(downloadPath);
     List<String> cmds = new ArrayList<>();
@@ -61,19 +66,15 @@ public class BilibiliClientDownsLocat {
 
                             if ("audio.m4s".equalsIgnoreCase(i.getName())
                                 || "video.m4s".equalsIgnoreCase(i.getName())) {
-                                                            newFilePath = newFilePath + ".mp4";
-                                                            cmds.add(
-                                                                mergeAudioAndVideoCmd(
-
-                               Arrays.stream(contentDirFile.listFiles())
-                                                                        .filter(x ->
-                               !"index.json".equalsIgnoreCase(x.getName()))
-
-                               .collect(Collectors.toList()),
-                                                                    newFilePath));
-                                                            addChange(i.getAbsolutePath(),
-                               newFilePath);
-                                                            break;
+                              newFilePath = newFilePath + ".mp4";
+                              cmds.add(
+                                  mergeAudioAndVideoCmd(
+                                      Arrays.stream(contentDirFile.listFiles())
+                                          .filter(x -> !"index.json".equalsIgnoreCase(x.getName()))
+                                          .collect(Collectors.toList()),
+                                      newFilePath));
+                              addChange(i.getAbsolutePath(), newFilePath);
+                              break;
                             } else {
                               newFilePath =
                                   newFilePath
@@ -115,7 +116,7 @@ public class BilibiliClientDownsLocat {
    * @param o
    * @param n
    */
-  private void addChange(String o, String n) {
+  private static void addChange(String o, String n) {
     JSONObject json = new JSONObject();
     json.put("o", o);
     json.put("n", n);
@@ -128,7 +129,7 @@ public class BilibiliClientDownsLocat {
    * @param idx
    * @return
    */
-  private String getIdx(String idx) {
+  private static String getIdx(String idx) {
     if (idx.length() == 1) {
       return "00" + idx;
     }
@@ -145,7 +146,7 @@ public class BilibiliClientDownsLocat {
    * @param newFilePath
    * @return
    */
-  private String mergeAudioAndVideoCmd(List<File> farr, String newFilePath) {
+  private static String mergeAudioAndVideoCmd(List<File> farr, String newFilePath) {
     return String.format(
         "ffmpeg -i %s -i %s -c:v copy -c:a aac  -strict experimental \"%s\"",
         farr.get(0).getAbsolutePath(), farr.get(1).getAbsolutePath(), newFilePath);
@@ -157,7 +158,7 @@ public class BilibiliClientDownsLocat {
    * @param f
    * @param content
    */
-  private void write(File f, String content) {
+  private static void write(File f, String content) {
     f.getParentFile().mkdirs();
     if (f.exists()) {
       f.delete();
@@ -178,7 +179,7 @@ public class BilibiliClientDownsLocat {
    * @param file
    * @return
    */
-  private String readFileContent(File file) {
+  private static String readFileContent(File file) {
     String encoding = "UTF-8";
     byte[] filecontent = new byte[(int) file.length()];
     try {
@@ -203,7 +204,7 @@ public class BilibiliClientDownsLocat {
    * @param fileName
    * @return
    */
-  private String getFileSuffix(String fileName) {
+  private static String getFileSuffix(String fileName) {
     return fileName.substring(fileName.lastIndexOf(".") + 1);
   }
 }
