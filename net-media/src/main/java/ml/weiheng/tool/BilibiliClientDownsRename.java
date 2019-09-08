@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class BilibiliClientDownsLocat {
+/** @author h */
+public class BilibiliClientDownsRename {
 
   static String downloadPath = "/home/h/file/mv/download";
   static String outPath = "/home/h/file/mv/tmp";
