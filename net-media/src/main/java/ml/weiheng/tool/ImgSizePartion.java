@@ -1,7 +1,5 @@
 package ml.weiheng.tool;
 
-import org.junit.Test;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,41 +7,56 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 
+/** @author h */
 public class ImgSizePartion {
 
-  private String imgPath = "/home/h/Downloads/CoolMarket1";
-  private String outWidthPath = "/home/h/Downloads/width";
-  private String outheightPath = "/home/h/Downloads/height";
+  public static void main(String[] args) throws IOException {
+    //    String imgPath = "/sdcard/Pictures/CoolMarket";
+    //    String outWidthPath = "/sdcard/file/image/acg_background_pc";
+    //    String outheightPath = "/sdcard/file/image/acg_background_phone";
 
-  @Test
-  public void partion() throws IOException {
-    File parent = new File(imgPath);
+    String imgPath = "/home/h/Downloads/CoolMarket";
+    String outWidthPath = "/home/h/Downloads/width";
+    String outHeightPath = "/home/h/Downloads/height";
+
+    partion(imgPath, outWidthPath, outHeightPath);
+  }
+
+  private static void partion(String p, String wout, String hout) throws IOException {
+    File parent = new File(p);
     BufferedImage sourceImg;
-    int cnt = 0;
-
+    int successCnt = 0;
+    int failedCnt = 0;
     for (File file : Objects.requireNonNull(parent.listFiles())) {
       sourceImg = ImageIO.read(new FileInputStream(file));
+      String originPath = file.getAbsolutePath();
       if (sourceImg == null) {
+        failedCnt++;
+        log("一个失败! 文件:%s无法读取为图像文件", originPath);
         continue;
       }
 
       int w = sourceImg.getWidth();
       int h = sourceImg.getHeight();
-      String name = file.getName();
-      String uPath;
-      if (w >= h) {
-        uPath = outWidthPath;
-      } else {
-        uPath = outheightPath;
-      }
-      String fin = uPath + File.separator + name;
-      System.out.println(fin);
-      cnt++;
-      file.renameTo(new File(fin));
-    }
+      String uPath = w >= h ? wout : hout;
+      String fin = uPath + File.separator + file.getName();
 
-    System.out.println("cnt");
-    System.out.println(cnt);
+      if (file.renameTo(new File(fin))) {
+        successCnt++;
+        log("文件已移动: %s -> %s", originPath, fin);
+      } else {
+        failedCnt++;
+        log("一个失败! 文件:%s无法移动到", originPath, fin);
+      }
+    }
+    log("分拣完成~~, 共%s个文件, 成功:%s, 失败:%s.", successCnt + failedCnt, successCnt, failedCnt);
   }
 
+  private static void log(String msg, Object... params) {
+    if (Objects.isNull(params)) {
+      System.out.println(msg);
+    } else {
+      System.out.println(String.format(msg, params));
+    }
+  }
 }
