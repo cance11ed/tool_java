@@ -16,8 +16,8 @@ public class ImgSizePartion {
     //    String outheightPath = "/sdcard/file/image/acg_background_phone";
 
     String imgPath = "/home/h/Downloads/CoolMarket";
-    String outWidthPath = "/home/h/Downloads/width";
-    String outHeightPath = "/home/h/Downloads/height";
+    String outWidthPath = "/home/h/file/img/acg_background_pc";
+    String outHeightPath = "/home/h/file/img/acg_background_phone";
 
     partion(imgPath, outWidthPath, outHeightPath);
   }
