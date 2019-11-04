@@ -11,13 +11,15 @@ import java.util.Objects;
 public class ImgSizePartion {
 
   public static void main(String[] args) throws IOException {
-    //    String imgPath = "/sdcard/Pictures/CoolMarket";
-    //    String outWidthPath = "/sdcard/file/image/acg_background_pc";
-    //    String outheightPath = "/sdcard/file/image/acg_background_phone";
+    String baseDir = "/home/h/Downloads/";
+    String widthDir = "width";
+    String heightDir = "height";
 
-    String imgPath = "/home/h/Downloads/CoolMarket";
-    String outWidthPath = "/home/h/file/img/acg_background_pc";
-    String outHeightPath = "/home/h/file/img/acg_background_phone";
+    String imgPath = baseDir + "CoolMarket";
+    String outWidthPath = baseDir + widthDir;
+    String outHeightPath = baseDir + heightDir;
+    new File(outWidthPath).mkdirs();
+    new File(outHeightPath).mkdirs();
 
     partion(imgPath, outWidthPath, outHeightPath);
   }
